@@ -935,5 +935,177 @@
     "data_version": "c264dfd786a8",
     "code_version": "0f1f216",
     "verdict": "CONFIRMED. Saved model matches run 7: price -0.437, usual_brand +0.49, entrant_bought_before +0.563. Price weight across 100 refits: -0.573 to -0.31 (90%). This saved file is what the app uses."
+  },
+  {
+    "id": 9,
+    "name": "e09 trust checks: shuffle test, blank messages, green notes",
+    "started_at": "2026-10-17T14:05:06+00:00",
+    "finished_at": "2026-10-17T14:07:20+00:00",
+    "status": "ok",
+    "expectation": "1. Shuffle test p-value for message about 0.05-0.10, close to the Wald p of 0.057. Still not proven.\n2. Without blank-message visits, the online weight stays about +0.3 with z about 2.\n   So the blank-message pattern is not what makes online look better.\n3. Green households: entrant weight about +0.3 but not clear (|z| < 2). Environment message\n   extra effect for green households: not clear. For \"do not trust green claims\": negative, not clear.\n   Too few households to settle any of it. This stays an open idea.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "model": "C = brand, price, household, levers",
+      "ridge": 0.01,
+      "seed": 9,
+      "shuffles": 200
+    },
+    "outputs": {
+      "1_message_shuffle_test": {
+        "real_wald_stat": 5.73,
+        "share_of_shuffles_as_big": 0.095,
+        "shuffle_stat_90th": 5.69
+      },
+      "2_online_without_blank": {
+        "online_all_visits": {
+          "std_error": 0.147,
+          "weight": 0.327,
+          "z": 2.22
+        },
+        "online_without_blank_messages": {
+          "std_error": 0.154,
+          "weight": 0.269,
+          "z": 1.74
+        },
+        "visits_kept": 1064
+      },
+      "3_green_note_idea": {
+        "households_green": 41,
+        "households_skeptic": 17,
+        "pieces": {
+          "entrant_if_green_note": {
+            "std_error": 0.203,
+            "weight": 0.824,
+            "z": 4.06
+          },
+          "environment_msg_if_green_note": {
+            "std_error": 0.343,
+            "weight": -0.106,
+            "z": -0.31
+          },
+          "environment_msg_if_skeptic_note": {
+            "std_error": 0.627,
+            "weight": -1.118,
+            "z": -1.78
+          }
+        }
+      }
+    },
+    "model_version": "logit-v1",
+    "data_version": "c264dfd786a8",
+    "code_version": "7c81f2c",
+    "verdict": "MIXED, with one big surprise. (1) Shuffle test: fake message gaps were as big as the real one 9.5% of the time (inside my 5-10% guess). Message still NOT proven. (2) Online weakens without blank-message visits: +0.33 (z=2.2) -> +0.27 (z=1.7). My guess (stays ~+0.3, z~2) was a bit too hopeful: part of 'online wins' may come from blank messages sitting mostly in retail. Online is now LESS sure than I thought, though run 7 still points online. (3) SURPRISE: households with a green survey note (41) buy the entrant much more: +0.82, z=4.1. I guessed +0.3 and not clear. But the environment MESSAGE adds nothing extra for them (-0.11, z=-0.3). 'Do not trust green claims' x environment message: -1.12, z=-1.8, 17 households: a hint only. Lesson: who the shopper is may matter more than what the shelf says. Follow-up: does the green note explain the 'bought before' effect?"
+  },
+  {
+    "id": 10,
+    "name": "e10 does the green note explain repeat buying",
+    "started_at": "2026-10-17T14:07:54+00:00",
+    "finished_at": "2026-10-17T14:08:04+00:00",
+    "status": "ok",
+    "expectation": "entrant_bought_before shrinks from +0.56 to about +0.45 but stays clear (z > 2.5).\nGreen-note weight stays clear (z > 3).\nCross-validated log loss on build improves by about 0.003 over model D (1.5701).",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "folds": 5,
+      "ridge": 0.01,
+      "seed": 11
+    },
+    "outputs": {
+      "bought_before_in_D": {
+        "weight": 0.563,
+        "z": 3.39
+      },
+      "bought_before_with_green_note": {
+        "weight": 0.519,
+        "z": 3.08
+      },
+      "cv_log_loss_D": 1.5701,
+      "cv_log_loss_D_plus_notes": 1.5649,
+      "green_note_with_history": {
+        "weight": 0.79,
+        "z": 3.82
+      }
+    },
+    "model_version": "logit-v3-notes (not used in app)",
+    "data_version": "c264dfd786a8",
+    "code_version": "cf014dc",
+    "verdict": "PARTLY WRONG. 'Bought before' shrinks only a little with the green note: +0.563 -> +0.519, still clear (z=3.1). I guessed ~+0.45. So the green note explains only a small part of repeat buying; other unmeasured taste could still explain the rest; the 'taste vs habit' question stays OPEN. Green note stays strong (+0.79, z=3.8). CV log loss improves 1.5701 -> 1.5649 (0.005), more than I guessed, and the biggest gain from any single piece so far (messages added 0.0009). As decided before the run, NOT added to the app model: the check set is used, so I cannot test it fairly. It goes into the real-shopper test plan."
+  },
+  {
+    "id": 11,
+    "name": "e11 size the real US shopper test",
+    "started_at": "2026-10-17T14:08:39+00:00",
+    "finished_at": "2026-10-17T14:08:39+00:00",
+    "status": "ok",
+    "expectation": "Price ($3.49 vs $4.49, about 8-9 points): about 400 shoppers per price group.\nMessage (environment vs cleaning, about 4 points): about 1,800-2,000 per message group.\nAt half the gap, both need about 4 times more.\nSo message, not price, decides how big the test must be.",
+    "inputs": {
+      "alpha_two_sided": 0.05,
+      "channel": "online",
+      "power": 0.8,
+      "shares_from_run": 5
+    },
+    "outputs": {
+      "message_environment_vs_cleaning": {
+        "gap_points": 4.0,
+        "shares": [
+          0.276,
+          0.236
+        ],
+        "shoppers_per_group": 1863,
+        "shoppers_per_group_if_half_the_gap": 7462,
+        "total_if_half_the_gap": 14924,
+        "total_test_shoppers": 3726
+      },
+      "predicted_cells": {
+        "3.49 / cleaning": {
+          "range_90": [
+            0.221,
+            0.343
+          ],
+          "share": 0.276
+        },
+        "3.49 / environment": {
+          "range_90": [
+            0.25,
+            0.38
+          ],
+          "share": 0.321
+        },
+        "4.49 / cleaning": {
+          "range_90": [
+            0.156,
+            0.239
+          ],
+          "share": 0.195
+        },
+        "4.49 / environment": {
+          "range_90": [
+            0.181,
+            0.275
+          ],
+          "share": 0.23
+        }
+      },
+      "price_3.49_vs_4.49": {
+        "gap_points": 8.6,
+        "shares": [
+          0.298,
+          0.213
+        ],
+        "shoppers_per_group": 400,
+        "shoppers_per_group_if_half_the_gap": 1612,
+        "total_if_half_the_gap": 3224,
+        "total_test_shoppers": 800
+      },
+      "two_by_two_total_shoppers": {
+        "half_gaps": 14924,
+        "model_gaps": 3726,
+        "per_version_half_gaps": 3731,
+        "per_version_model_gaps": 932
+      }
+    },
+    "model_version": "sizing-v1",
+    "data_version": "c264dfd786a8",
+    "code_version": "212dbf8",
+    "verdict": "CONFIRMED. Price gap (8.6 pts) needs 400 shoppers per price group; message gap (4.0 pts) needs 1,863 per message group. At half the gap: 1,612 and 7,462. A 2x2 online test needs about 3,700 shoppers (932 per version) at the model's gaps, about 15,000 (3,731 per version) if real shoppers react half as much. Message, not price, sets the size. Model predictions to check against: 3.49/env 32% [25-38], 3.49/cleaning 28% [22-34], 4.49/env 23% [18-28], 4.49/cleaning 20% [16-24]."
   }
 ]
