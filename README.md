@@ -1,36 +1,46 @@
-# Cleaner choice challenge
+# Cleaner choice challenge: my work
 
-A fictional US brand wants to sell a new toilet cleaner. The bottle holds 16 fl oz. Its formula stays the same. The brand can change its price and main shelf message. Each cleaner makes different claims. The data do not prove those claims.
+The task is in [CHALLENGE.md](CHALLENGE.md). My step-by-step thinking is in [JOURNAL.md](JOURNAL.md). My first concern, written before any code, is in [FIRST.md](FIRST.md).
 
-The public data show six visits for each of 250 fictional households. A household could buy one cleaner or buy none. Some households gave short answers after a choice or after using a cleaner. Their answers can be incomplete or wrong. The starter model gives a chance for each choice and a short reason. The data cannot prove why a household chose an item. They cannot show how real shoppers will act.
+## Run it
 
-**Your task:** The brand can fund one US test of the new cleaner. Recommend a price, shelf message, and sales channel to test first. If the evidence is too weak, say "I do not know yet." Explain why. Name the data or test that would let you decide. You have 48 hours to submit. A careful, partial result is useful.
+Python 3.10 or later. No packages to install.
 
-## 1. Build your approach
+```
+python app.py
+```
 
-Before you change code, commit a file named `FIRST.md`. Use at most 120 words. State your first concern, your first test, and what result would change your mind. Work in as many stages as you find useful.
+Then open http://localhost:8000. Change a household, price, message or channel and press the button.
 
-Run the test. Change how the system makes or explains choices across visits. Show household-level reasons and evidence for trusting or doubting them. You may change any part of the model or data. You may replace the approach. If you add data, state its source. Explain your choices. State what the system carries from one visit to the next, if anything.
+- **Live app:** _link added after deploy_
+- **JSON endpoint:** `/api/predict?household_id=new&budget=tight&entrant_price=3.49&channel=online`
+  (or POST the same fields as JSON)
+- **Saved runs:** `/runs` and `/runs/<id>` in the app, or `python runlog.py list` / `python runlog.py show 7`
+- **Run database:** `runs.sqlite` (SQLite), with a JSON copy in `runs_export.json`
+- **Tests:** `python -m unittest discover -s tests`
 
-## 2. Check trust
+## What is where
 
-Build checks that help you decide whether the brand can trust the system. Choose what to check and how. Show an idea that failed, gave conflicting results, or remains untested. Explain why. State what the data cannot tell you. Describe a test with real US shoppers that could show the system is wrong. State what result would change your view. You do not need to run this test.
+| File | What it does |
+|---|---|
+| `choice_model.py` | The learned choice model (a logit model, standard library only) |
+| `build_model.py` | Trains the model and saves it to `model/model_D.json` (run 8) |
+| `explain.py` | Answer for one household: chances, likely range, "change one thing" reasons with trust labels |
+| `app.py` | The web page and JSON endpoint |
+| `runlog.py` | Saves each run: expectation (written first), inputs, outputs, model, data and code version, verdict |
+| `experiments/` | One file per run (e01 to e07). Each one states its expectation before it runs |
+| `baseline.py`, `run_baseline.py` | The starter, unchanged |
 
-## Show your work
+To redo every run: `python -m experiments.e01_baseline` (and so on, up to e07), then `python build_model.py`.
 
-- Give us a live app or endpoint. It must accept a changed input and return a new result from your code. A simple interface is enough.
-- Before each experiment, record what you expect to see. Save the expectation, inputs, outputs, model version, and data version in a database. Keep your first run and failed runs. Let us inspect past runs by ID. You may use SQLite or any free database.
-- Send your repository link, live link, one command to run your work locally, and a copy or export of the run database.
-- Add a final note of at most 200 words. Name a saved run that changed or confirmed your view. Choose a next test for the brand. If no test is ready, say why. State what result would change your choice.
+## What the model carries from one visit to the next
 
-You may use AI tools. Your program should run on a laptop CPU. It should not need an API or GPU. We look at how you frame the problem, test ideas, change course, and state limits. We care more about your decisions and evidence than a score or a polished interface.
+Only two things: whether the household bought the new cleaner before, and whether it gave a good or bad note after using it. I tested other history pieces (repeating the last choice, buying nothing right after buying) and they did nothing (run 4).
 
-We will ask you to explain one saved run and a new household in a short live review.
+## Where I stand (not final yet)
 
-## Start
+- **Channel:** online. Clear in the build data, and it held on new households.
+- **Message:** environment is the best bet, but not proven.
+- **Price:** I don't know yet. $3.49 sells the most, but if a bottle costs the brand more than about $1.16, $4.49 makes more money. That cost isn't in the data.
 
-Use Python 3.10 or later. Run `python run_baseline.py` from this folder. The starter uses the Python standard library. It prints results for a build set and a check set.
-
-`households.csv` holds answers from one survey before the visits. It includes income bands, budget pressure, and reported monthly spend on cleaning supplies.
-
-`products.csv` describes the four cleaners. `visits.csv` holds 1,200 visits from 200 households. Use it to build your approach. `check_visits.csv` holds 300 visits from 50 other households. Use it to test your approach. If its results lead you to change your approach, say so. Do not present a later result on that same set as a fresh test. Both visit files hold the channel, prices, message, and choice. They also hold some answers given after the choice (`said_why`) and after product use (`after_use_note`). These answers are available before the next visit. Visits appear in time order for each household. Some fields are blank. Prices are in US dollars. All households, prices, claims, and answers are fictional.
+The final note comes at the end.
