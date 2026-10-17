@@ -12,7 +12,7 @@ python app.py
 
 Then open http://localhost:8000. Change a household, price, message or channel and press the button.
 
-- **Live app:** _link added after deploy_
+- **Live app:** https://cleaner-choice.onrender.com (free plan: the first load after a quiet spell can take about 30-50 seconds)
 - **JSON endpoint:** `/api/predict?household_id=new&budget=tight&entrant_price=3.49&channel=online`
   (or POST the same fields as JSON)
 - **Saved runs:** `/runs` and `/runs/<id>` in the app, or `python runlog.py list` / `python runlog.py show 7`
