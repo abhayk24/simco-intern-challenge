@@ -174,3 +174,24 @@ I locked model D (trained on all 200 build households) and wrote the pass rules 
 - **Price:** I don't know yet. It depends on the brand's cost per bottle. $3.49 sells the most, but if a bottle costs more than about $1.16, $4.49 makes more money.
 
 **Next.** Build the small live app (change an input, get a new answer), with household-level reasons that show their evidence. Then the remaining trust checks (what fails, what the data can't tell us), the real-shopper test design, and the final note.
+
+## Stage 4: The live app
+
+**What I built.** `app.py` is a small web page that runs with just Python (no installs). You pick a household from the data, or describe a new one. You change the new cleaner's price, message, channel or the other cleaners' prices. You get back:
+- the chance of each choice, plus a likely range for the new cleaner (from 100 refits on resampled households, saved in run 8);
+- **"change one thing" reasons** for that household: switch one piece off and see how many points the new cleaner's chance moves;
+- a **trust label** on each reason ("solid", "weak" or "not proven"), plus which saved run backs it or doubts it;
+- what the chance would be at $3.49, $4.49 and $5.49;
+- the household's past visits. `said_why` is shown, but marked as not used (run 6);
+- the model's limits, always on screen.
+
+The same answer is available as JSON at `/api/predict`. All saved runs can be opened at `/runs/<id>`.
+
+**Why "change one thing" reasons.** The starter gave one fixed sentence. I wanted a reason you can check: if the page says "online adds 5.5 points", you can switch the channel to retail and see the number drop. The trust label stops a big but shaky piece from looking like a fact. For example, a bad note after use can move the chance by -15 points, but it rests on only 51 visits, so it shows as "not proven".
+
+**Choices I made:**
+- The model is trained once and saved (`model/model_D.json`), so the app starts fast and every answer names its model and data version.
+- Prices outside what the data covers still work, but show a warning that it's a guess past the data.
+- Income, spend, bathrooms and the survey note aren't used, and the page says so. I never tested them.
+
+**Checks.** 9 new tests: a changed input gives a new result; GET and POST give the same answer; bad inputs get a clear error; every reason has a trust label and evidence; the likely range contains the main answer; all the pages load.
