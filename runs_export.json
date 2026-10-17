@@ -213,5 +213,173 @@
     "data_version": "c264dfd786a8",
     "code_version": "47b5f0c",
     "verdict": "MIXED. Price confirmed: 3.49 vs 5.49 = +16.1 pts [11.2, 21.1]. Clustering concern WRONG for gaps: household and visit intervals are the same width (ratio 0.91-1.03), because each household saw several levels, so its own taste cancels in a gap. Households do differ (entrant-count variance 1.58 vs 1.00 binomial), so clustering still matters for levels. By my FIRST.md rule, environment vs low_odor [1.8, 13.4] and online vs retail [0.8, 9.5] pass. But I picked environment vs low_odor because it was the largest raw gap, and 7 gaps were tested; both lower ends are close to 0. I do NOT yet treat message or channel as settled. Next: a stricter test declared in advance."
+  },
+  {
+    "id": 3,
+    "name": "e03 grow the learned model one idea at a time",
+    "started_at": "2026-10-17T13:23:18+00:00",
+    "finished_at": "2026-10-17T13:23:29+00:00",
+    "status": "ok",
+    "expectation": "(I already fit model A once while testing the code: train log loss 1.58, price weight -0.46.)\nA: cross-validated log loss about 1.585, no better than the starter (1.579).\nB: usual brand helps clearly, CV log loss about 1.55, usual-brand weight about +0.5.\nB+msg and B+chan: each improves CV log loss by less than 0.003, maybe none.\n\nRULE, decided now: I call message or channel \"real\" only if BOTH\n  (1) its Wald test inside model C has p < 0.01 (strict, because I test several things), and\n  (2) adding it to B lowers cross-validated log loss.\nMy guess: message p between 0.01 and 0.1 and channel p about 0.03, so both FAIL the rule.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "folds": 5,
+      "ridge": 0.01,
+      "seed": 11,
+      "split": "by household"
+    },
+    "outputs": {
+      "A": {
+        "cv_log_loss": 1.587,
+        "cv_top_choice": 0.2742
+      },
+      "B": {
+        "cv_log_loss": 1.575,
+        "cv_top_choice": 0.3
+      },
+      "B+chan": {
+        "cv_log_loss": 1.5746,
+        "cv_top_choice": 0.3033
+      },
+      "B+msg": {
+        "cv_log_loss": 1.5741,
+        "cv_top_choice": 0.3033
+      },
+      "C": {
+        "cv_log_loss": 1.5741,
+        "cv_top_choice": 0.3075
+      },
+      "C_weights": {
+        "entrant_msg_cleaning": [
+          -0.065,
+          0.254
+        ],
+        "entrant_msg_environment": [
+          0.16,
+          0.25
+        ],
+        "entrant_msg_low_odor": [
+          -0.291,
+          0.259
+        ],
+        "entrant_online": [
+          0.327,
+          0.147
+        ],
+        "is_budget": [
+          1.593,
+          0.274
+        ],
+        "is_entrant": [
+          2.14,
+          0.421
+        ],
+        "is_scented": [
+          1.756,
+          0.373
+        ],
+        "is_standard": [
+          1.852,
+          0.347
+        ],
+        "price": [
+          -0.45,
+          0.088
+        ],
+        "price_if_flexible_budget": [
+          0.022,
+          0.049
+        ],
+        "price_if_tight_budget": [
+          -0.083,
+          0.043
+        ],
+        "usual_brand": [
+          0.492,
+          0.077
+        ]
+      },
+      "rule": {
+        "channel_real": false,
+        "message_real": false
+      },
+      "starter_full_build": 1.5793,
+      "wald_channel_zero": {
+        "df": 1,
+        "p": 0.0262,
+        "stat": 4.95
+      },
+      "wald_message_all_equal": {
+        "df": 2,
+        "p": 0.0569,
+        "stat": 5.73
+      }
+    },
+    "model_version": "logit-v1",
+    "data_version": "c264dfd786a8",
+    "code_version": "681f710",
+    "verdict": "MOSTLY CONFIRMED, one surprise. A = 1.587 as guessed. Usual brand weight +0.49 as guessed, but B only reaches 1.575, not the 1.55 I expected: knowing the household helps much less than I thought. Message p=0.057 and channel p=0.026, both fail the pre-declared rule (p<0.01 AND lower CV loss); CV gains are tiny (0.0009 and 0.0004). Big lesson: every model sits near 1.575-1.59, so most of each choice is not predictable from these fields. Tight budget makes price matter a bit more (-0.083 +/- 0.043), not clear."
+  },
+  {
+    "id": 4,
+    "name": "e04 does history help",
+    "started_at": "2026-10-17T13:24:00+00:00",
+    "finished_at": "2026-10-17T13:24:06+00:00",
+    "status": "ok",
+    "expectation": "Stage 1 showed households repeat their last choice only 23.1% vs 20.6% by chance, so:\nsame_as_last_visit small and positive (about +0.15), not clear (p > 0.05).\nnone_after_buying_last_visit near zero (the starter assumes it is positive; I doubt it).\nentrant_bought_before positive; entrant_bad_note_before negative.\nOverall D improves CV log loss over C (1.5741) by less than 0.005.\nRULE: history is worth carrying between visits only if D beats C in CV log loss.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "folds": 5,
+      "ridge": 0.01,
+      "seed": 11,
+      "split": "by household"
+    },
+    "outputs": {
+      "C": {
+        "cv_log_loss": 1.5741,
+        "cv_top_choice": 0.3075
+      },
+      "D": {
+        "cv_log_loss": 1.5701,
+        "cv_top_choice": 0.305
+      },
+      "history_weights": {
+        "entrant_bad_note_before": {
+          "std_error": 0.431,
+          "visits_with_it": 51,
+          "weight": -0.818,
+          "z": -1.9
+        },
+        "entrant_bought_before": {
+          "std_error": 0.166,
+          "visits_with_it": 442,
+          "weight": 0.563,
+          "z": 3.39
+        },
+        "entrant_good_note_before": {
+          "std_error": 0.279,
+          "visits_with_it": 76,
+          "weight": 0.195,
+          "z": 0.7
+        },
+        "none_after_buying_last_visit": {
+          "std_error": 0.168,
+          "visits_with_it": 823,
+          "weight": 0.084,
+          "z": 0.5
+        },
+        "same_as_last_visit": {
+          "std_error": 0.091,
+          "visits_with_it": 823,
+          "weight": -0.006,
+          "z": -0.06
+        }
+      },
+      "rule_history_worth_it": true
+    },
+    "model_version": "logit-v2-history",
+    "data_version": "c264dfd786a8",
+    "code_version": "daa72d1+dirty",
+    "verdict": "PARTLY WRONG. History helps a little: CV 1.5741 -> 1.5701, rule passes. But the gain comes from ONE thing: entrant_bought_before +0.56 (z=3.4). same_as_last_visit is 0.00, not +0.15 as I guessed. none_after_buying is ~0 (z=0.5), so the starter's built-in idea is not supported. Bad entrant note -0.82 (z=-1.9) on only 51 visits: a hint, not proof. CAVEAT: 'bought before' may just mean some households liked the entrant from the start; this data cannot tell taste from 'trying it made them like it'. What the model carries between visits: did they buy the entrant before, and what note they gave it."
   }
 ]

@@ -59,3 +59,52 @@ I am flagging this openly instead of quietly changing the rule: by the rule as w
 **Choices barely carry over between visits.** A household repeats its last choice 23.1% of the time, vs 20.6% if visits were independent. So history may add little. The model stage will test this properly.
 
 **Next.** (a) Fit a simple learned choice model on the build set and compare it with run 1. (b) Decide in advance, before looking, a stricter test for message and channel: one that controls for price and the other levers at the same time, and that counts the number of comparisons.
+
+## Stage 2: A model that learns, built one piece at a time
+
+**What I built.** `choice_model.py`. Same idea as the starter: each option gets a score, and scores turn into chances. The difference is that the model learns the size of each effect from the build visits instead of me guessing them. I can switch pieces on and off, so I can add one idea at a time and see if it actually helps.
+
+**How I judge "helps".** I split the 200 build households into 5 groups. The model learns from 4 groups and gets tested on the 5th, which it has never seen, and I repeat that 5 times. Lower log loss is better. I still haven't touched the check set.
+
+**Run 3: adding pieces one by one**
+
+| Model | What it knows | Log loss (lower is better) |
+|---|---|---|
+| Starter | hand-set guesses | 1.579 |
+| A | brand + price | 1.587 |
+| B | A + usual brand + budget | 1.575 |
+| B + message | | 1.574 |
+| B + channel | | 1.575 |
+| C | B + message + channel | 1.574 |
+
+- Price: learned as -0.45, close to the starter's -0.4. The starter's guess there was fine.
+- Usual brand matters (+0.49). But it helped much less than I expected (I guessed 1.55).
+- **Message and channel failed the rule I wrote down before the run.** Message p = 0.057, channel p = 0.026, and I had set p < 0.01 as the bar. Adding them barely changes the test score.
+- **The big lesson:** every model sits around 1.57 to 1.59. Most of what a household picks on a given visit just can't be predicted from these fields. That's worth saying plainly to the brand.
+
+**Run 4: does the past help?**
+
+| History piece | Weight | Clear? | Visits it applies to |
+|---|---|---|---|
+| bought the entrant before | +0.56 | yes (z = 3.4) | 442 |
+| bad note after using the entrant | -0.82 | maybe (z = -1.9) | 51 |
+| good note after using the entrant | +0.20 | no | 76 |
+| same choice as last visit | 0.00 | no | 823 |
+| buy nothing right after buying | +0.08 | no | 823 |
+
+- History helps a little (1.574 to 1.570), and nearly all of the gain is "bought the entrant before". A raw count agrees: 27.1% buy it again vs 17.5% for households that never bought it.
+- I was wrong about "same as last visit": it's zero, not +0.15.
+- The starter assumes people buy nothing right after buying, because they still have cleaner at home. The data doesn't back that up.
+- **What I can't tell:** maybe trying the entrant made people like it, or maybe some households just liked it from the start. Both look the same in this data. A real test would need first-time buyers tracked over time.
+
+**What the model carries from one visit to the next:** whether the household bought the entrant before, and whether it left a good or bad note after using it. Nothing else.
+
+**Checks I added.** A test that changing a later visit never changes what the model knew at an earlier visit (no peeking at the future), plus basic tests that the chances add up to 1 and that a higher price lowers the entrant's chance.
+
+**Where I stand now.**
+- Price: clear. Lower sells more.
+- Message: not clear. Environment looks best, but it doesn't pass my bar.
+- Channel: not clear. Online looks a bit better, but it doesn't pass either.
+- Repeat buying: the entrant has some pull on people who tried it, and bad stain notes may hurt it.
+
+**Next.** Turn the model into real numbers for the brand (expected entrant share for each price, message and channel combination, with uncertainty). Look at `said_why` to see if people's stated reasons can be trusted. Only after that, run the model once on the check set.
