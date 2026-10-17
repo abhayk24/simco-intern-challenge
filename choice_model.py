@@ -180,6 +180,23 @@ class ChoiceModel:
         self.train_log_loss = (loss - 0.5 * self.ridge * sum(x * x for x in w)) / len(y)
         return self
 
+    # ----- saving and loading -----
+    def to_dict(self):
+        return {"groups": sorted(self.groups), "ridge": self.ridge,
+                "weights": self.weights, "std_errors": self.std_errors}
+
+    @classmethod
+    def from_dict(cls, d):
+        model = cls(d["groups"], d["ridge"])
+        model.weights = dict(d["weights"])
+        model.std_errors = dict(d.get("std_errors", {}))
+        return model
+
+    def score_parts(self, household, offers, visit, history):
+        """For each option: {feature: weight * value}. Used to explain a prediction."""
+        rows = self._rows(offers, household, visit, history)
+        return {name: {n: self.weights.get(n, 0.0) * v for n, v in f.items()} for name, f in rows}
+
     # ----- predicting -----
     def predict(self, household, offers, visit, history):
         """Same shape as the starter: chances for each option, plus a short reason."""
