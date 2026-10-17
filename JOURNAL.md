@@ -195,3 +195,21 @@ The same answer is available as JSON at `/api/predict`. All saved runs can be op
 - Income, spend, bathrooms and the survey note aren't used, and the page says so. I never tested them.
 
 **Checks.** 9 new tests: a changed input gives a new result; GET and POST give the same answer; bad inputs get a clear error; every reason has a trust label and evidence; the likely range contains the main answer; all the pages load.
+
+## Stage 5: Last trust checks and the answer
+
+**Run 9: three more checks.**
+- **Shuffle test for message.** Fake message gaps were as big as the real one 9.5% of the time. Message is still not proven.
+- **Online without blank-message visits.** Blank messages sit mostly in retail. Without them, online weakens (+0.33 to +0.27, z 2.2 to 1.7). I'm less sure about online than I was.
+- **Surprise: who the shopper is matters more than the sign.** Households whose survey note sounds green ("go down the drain", "fewer plastic bottles") buy the new cleaner a lot more (+0.82, z = 4.1, 41 households). But the environment *sign* adds nothing extra for them. They like the product anyway.
+
+**Run 10: is "bought before" just green households?** Only a little. "Bought before" drops from +0.56 to +0.52 and stays clear. So "taste or habit?" stays open. The green note is the single most useful piece I found (cross-validation 1.570 to 1.565). But I found it after the check set was used up, so I kept it out of the app on purpose. It goes into the real-shopper test instead.
+
+**Run 11: how big must a real test be?** A 4-version online test ($3.49 or $4.49, each with environment or cleaning) needs about 3,700 shoppers if real gaps match the model, and about 15,000 if they're half as big. The message question, not price, sets the size.
+
+**The answer, in one line each:**
+- **Channel: online.** A lean, not proof. It held on the check set but weakened in run 9. It's also the easiest place to show shoppers random versions.
+- **Message: environment as the lead,** tested against cleaning, because the two are not proven apart.
+- **Price: I don't know yet.** It depends on the cost per bottle (run 5). Test $3.49 against $4.49, or just ask the brand for its cost.
+
+**The run that changed my mind most: run 5.** Before it, I thought "lowest price wins". After it, I saw that the clearest finding in the data (price) still doesn't make the business decision on its own.
