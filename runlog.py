@@ -105,7 +105,9 @@ def run_experiment(name, expectation, inputs, model_version, fn, data_files=None
 
 
 def get_run(run_id):
-    row = connect().execute("SELECT * FROM runs WHERE id=?", (run_id,)).fetchone()
+    db = connect()
+    row = db.execute("SELECT * FROM runs WHERE id=?", (run_id,)).fetchone()
+    db.close()
     if row is None:
         raise KeyError(f"No run with id {run_id}")
     run = dict(row)
@@ -115,14 +117,18 @@ def get_run(run_id):
 
 
 def list_runs():
-    return [dict(r) for r in connect().execute(
+    db = connect()
+    rows = [dict(r) for r in db.execute(
         "SELECT id, name, status, model_version, data_version, started_at, verdict FROM runs ORDER BY id")]
+    db.close()
+    return rows
 
 
 def set_verdict(run_id, text):
     db = connect()
     db.execute("UPDATE runs SET verdict=? WHERE id=?", (text, run_id))
     db.commit()
+    db.close()
 
 
 def export(path=ROOT / "runs_export.json"):

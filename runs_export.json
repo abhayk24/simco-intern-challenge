@@ -884,5 +884,56 @@
     "data_version": "c264dfd786a8",
     "code_version": "76e7533",
     "verdict": "CONFIRMED VIEW (all 3 pre-declared rules pass). D log loss 1.552 vs starter 1.563 vs constant 1.591. Gain of 0.011 is small and the household interval [-0.038, +0.015] includes zero, as guessed: D is better on average but not proven better on 50 households. Entrant share predicted 21.0% vs actual 18.3% (2.6 pts, inside the 3-pt rule): D slightly OVERSELLS the entrant; the 15-25% bin predicts 19.7% but only 13.4% buy. Price direction strong on new households: 25.5% at 3.49 vs 7.7% at 5.49. Message and channel point the same way as in build (environment 21.9% vs 17.9%; online 22.2% vs 14.3%), which supports them but cannot settle them at ~100 visits each. The check set is now USED; any later result on it is not a fresh test."
+  },
+  {
+    "id": 8,
+    "name": "e08 build the saved model for the app",
+    "started_at": "2026-10-17T13:45:27+00:00",
+    "finished_at": "2026-10-17T13:47:00+00:00",
+    "status": "ok",
+    "expectation": "Same pieces and settings as runs 4, 5 and 7, so the main weights should match run 7's model:\nprice about -0.45, usual_brand about +0.49, entrant_bought_before about +0.56.\nThe 100 refits should give price weights between about -0.6 and -0.3.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "groups": [
+        "brand",
+        "price",
+        "household",
+        "levers",
+        "history"
+      ],
+      "reps": 100,
+      "ridge": 0.01,
+      "seed": 21
+    },
+    "outputs": {
+      "file": "model_D.json",
+      "price_weight_90": [
+        -0.573,
+        -0.31
+      ],
+      "weights": {
+        "entrant_bad_note_before": -0.818,
+        "entrant_bought_before": 0.563,
+        "entrant_good_note_before": 0.195,
+        "entrant_msg_cleaning": -0.044,
+        "entrant_msg_environment": 0.17,
+        "entrant_msg_low_odor": -0.246,
+        "entrant_online": 0.335,
+        "is_budget": 1.611,
+        "is_entrant": 1.902,
+        "is_scented": 1.76,
+        "is_standard": 1.862,
+        "none_after_buying_last_visit": 0.084,
+        "price": -0.437,
+        "price_if_flexible_budget": 0.018,
+        "price_if_tight_budget": -0.082,
+        "same_as_last_visit": -0.006,
+        "usual_brand": 0.49
+      }
+    },
+    "model_version": "logit-v2-history",
+    "data_version": "c264dfd786a8",
+    "code_version": "0f1f216",
+    "verdict": "CONFIRMED. Saved model matches run 7: price -0.437, usual_brand +0.49, entrant_bought_before +0.563. Price weight across 100 refits: -0.573 to -0.31 (90%). This saved file is what the app uses."
   }
 ]
