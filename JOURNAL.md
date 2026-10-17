@@ -108,3 +108,69 @@ I am flagging this openly instead of quietly changing the rule: by the rule as w
 - Repeat buying: the entrant has some pull on people who tried it, and bad stain notes may hurt it.
 
 **Next.** Turn the model into real numbers for the brand (expected entrant share for each price, message and channel combination, with uncertainty). Look at `said_why` to see if people's stated reasons can be trusted. Only after that, run the model once on the check set.
+
+## Stage 3: Numbers for the brand, stated reasons, and the one check-set test
+
+**Run 5: what each option would sell on a first visit**
+
+I asked model D: if a household sees the entrant for the first time at this price, message and channel, what's the chance it buys? Then I redid it 200 times on resampled households to see how much the answer moves.
+
+Top options (entrant share, 90% range):
+- $3.49 / environment / online: 32% (25% to 38%)
+- $3.49 / cleaning / online: 28% (22% to 34%)
+- $3.49 / environment / retail: 25% (20% to 31%)
+- ...
+- $5.49 / low_odor / retail: 8% (6% to 11%), the worst
+
+How often each one comes out on top across the 200 redos:
+- **Price:** $3.49 sells the most every single time.
+- **Channel:** online beats retail 98.5% of the time.
+- **Message:** environment is best 81.5% of the time, cleaning 17.5%, low_odor 1%.
+
+**The catch on price.** Selling the most bottles isn't the same as making the most money. We don't know what a bottle costs the brand. So I worked out where the answer flips:
+- If a bottle costs less than about $1.16: $3.49 makes the most money.
+- Between about $1.16 and $2.36: $4.49 makes more.
+- Above about $2.36: $5.49 makes more.
+
+The range on that $1.16 is wide ($0.11 to $1.79). **The data can't pick the price for profit without the brand's cost.**
+
+**A result that looks like a conflict.** Run 3 said messages are *not proven* different (p = 0.057). Run 5 says environment wins 81.5% of the time. Both are true. They answer different questions: "are the messages different at all?" vs "which one is most likely best?". Environment is the best bet, but a 1-in-5 chance it isn't is too high to call it settled.
+
+**Run 6: can we trust what people say?**
+
+I checked each `said_why` answer against facts we already have.
+- Only 7.8% of the checkable answers flat-out contradict the facts. That's fewer than I expected.
+- **But the bigger finding:** 15 of the 16 reasons always come with *one* product. "I know this brand" always goes with standard. "I wanted less smell" always goes with the entrant. Knowing the reason tells you the choice 94% of the time. So these answers mostly repeat each product's own claims. They aren't an independent "why".
+- Where answers do contradict facts:
+  - "I bought the cleaner I often buy" disagrees with the survey's usual brand 9 out of 31 times.
+  - "I still had cleaner at home" came from people who hadn't bought anything the visit before, 7 out of 18 times.
+- I guessed the "environment" sign would make people *say* "less waste" more often. It didn't (36% vs 46% and 50%). Small numbers, though.
+- Entrant buyers answer more often than others (29% vs 21%), so the answers aren't a fair sample either.
+- **Decision:** I won't use `said_why` as a model input, or as the "reason" the app shows.
+
+(Side note: I ran the one-reason-one-product count on the check set too, just to see whether the pattern holds. It does (96%). No model decision used it.)
+
+**Run 7: the one-time test on the check set**
+
+I locked model D (trained on all 200 build households) and wrote the pass rules first. All three passed:
+
+| Model | Log loss on check (lower is better) |
+|---|---|
+| D (my model) | 1.552 |
+| C (no history) | 1.554 |
+| Starter | 1.563 |
+| Always-average | 1.591 |
+
+- D beats the starter, but only by 0.011, and the range (-0.038 to +0.015) includes zero. So: better on average, not proven better on 50 households.
+- **D slightly oversells the entrant**: it predicts 21.0% and the truth is 18.3%. In the middle group (where D says 15-25%), only 13% actually buy.
+- On new households, price holds strongly: 25.5% at $3.49 vs 7.7% at $5.49.
+- Message and channel point the same way as before (environment 21.9% vs 17.9% for the others; online 22.2% vs 14.3% retail). That supports them, but at about 100 visits per message it can't settle anything.
+
+**The check set is now used.** If I change the model after this, a new check-set score won't count as a fresh test, and I'll say so.
+
+**Where I lean right now (not final):**
+- **Channel:** online. Clear in build, and it held on new households.
+- **Message:** environment. The most likely best, not proven.
+- **Price:** I don't know yet. It depends on the brand's cost per bottle. $3.49 sells the most, but if a bottle costs more than about $1.16, $4.49 makes more money.
+
+**Next.** Build the small live app (change an input, get a new answer), with household-level reasons that show their evidence. Then the remaining trust checks (what fails, what the data can't tell us), the real-shopper test design, and the final note.

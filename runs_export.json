@@ -381,5 +381,508 @@
     "data_version": "c264dfd786a8",
     "code_version": "daa72d1+dirty",
     "verdict": "PARTLY WRONG. History helps a little: CV 1.5741 -> 1.5701, rule passes. But the gain comes from ONE thing: entrant_bought_before +0.56 (z=3.4). same_as_last_visit is 0.00, not +0.15 as I guessed. none_after_buying is ~0 (z=0.5), so the starter's built-in idea is not supported. Bad entrant note -0.82 (z=-1.9) on only 51 visits: a hint, not proof. CAVEAT: 'bought before' may just mean some households liked the entrant from the start; this data cannot tell taste from 'trying it made them like it'. What the model carries between visits: did they buy the entrant before, and what note they gave it."
+  },
+  {
+    "id": 5,
+    "name": "e05 options table with uncertainty",
+    "started_at": "2026-10-17T13:34:29+00:00",
+    "finished_at": "2026-10-17T13:37:24+00:00",
+    "status": "ok",
+    "expectation": "$3.49 gives the highest entrant share in over 99% of resamples.\nenvironment is the best message in about 70% of resamples; low_odor best in under 5%.\nonline beats retail in about 98% of resamples.\nBest option (3.49, environment, online) has entrant share about 30-35%.\nRevenue per shopper is also highest at $3.49.\nBreak-even cost per bottle for $4.49 over $3.49 is about $1.50, with a wide interval.\nSo the best PRICE for profit depends on a cost we do not know.",
+    "inputs": {
+      "channels": [
+        "online",
+        "retail"
+      ],
+      "competitor_prices": {
+        "budget": 2.99,
+        "scented": 4.29,
+        "standard": 3.99
+      },
+      "data": "visits.csv (build only)",
+      "messages": [
+        "cleaning",
+        "environment",
+        "low_odor"
+      ],
+      "model": "D = brand, price, household, levers, history",
+      "prices": [
+        3.49,
+        4.49,
+        5.49
+      ],
+      "reps": 200,
+      "ridge": 0.01,
+      "seed": 5
+    },
+    "outputs": {
+      "break_even_cost_3.49_vs_4.49": {
+        "interval_90": [
+          0.11,
+          1.79
+        ],
+        "point": 1.16
+      },
+      "break_even_cost_4.49_vs_5.49": {
+        "interval_90": [
+          1.31,
+          3.01
+        ],
+        "point": 2.36
+      },
+      "chance_best_message": {
+        "cleaning": 0.175,
+        "environment": 0.815,
+        "low_odor": 0.01
+      },
+      "chance_best_option_by_share": {
+        "(3.49, 'cleaning', 'online')": 0.17,
+        "(3.49, 'cleaning', 'retail')": 0.005,
+        "(3.49, 'environment', 'online')": 0.805,
+        "(3.49, 'environment', 'retail')": 0.01,
+        "(3.49, 'low_odor', 'online')": 0.01
+      },
+      "chance_best_price_by_share": {
+        "3.49": 1.0
+      },
+      "chance_online_beats_retail": 0.985,
+      "options": {
+        "3.49 / cleaning / online": {
+          "entrant_share": 0.276,
+          "revenue_per_shopper": 0.963,
+          "share_90": [
+            0.221,
+            0.343
+          ]
+        },
+        "3.49 / cleaning / retail": {
+          "entrant_share": 0.214,
+          "revenue_per_shopper": 0.748,
+          "share_90": [
+            0.164,
+            0.272
+          ]
+        },
+        "3.49 / environment / online": {
+          "entrant_share": 0.321,
+          "revenue_per_shopper": 1.119,
+          "share_90": [
+            0.25,
+            0.38
+          ]
+        },
+        "3.49 / environment / retail": {
+          "entrant_share": 0.253,
+          "revenue_per_shopper": 0.882,
+          "share_90": [
+            0.197,
+            0.306
+          ]
+        },
+        "3.49 / low_odor / online": {
+          "entrant_share": 0.237,
+          "revenue_per_shopper": 0.829,
+          "share_90": [
+            0.183,
+            0.294
+          ]
+        },
+        "3.49 / low_odor / retail": {
+          "entrant_share": 0.182,
+          "revenue_per_shopper": 0.636,
+          "share_90": [
+            0.14,
+            0.221
+          ]
+        },
+        "4.49 / cleaning / online": {
+          "entrant_share": 0.195,
+          "revenue_per_shopper": 0.874,
+          "share_90": [
+            0.156,
+            0.239
+          ]
+        },
+        "4.49 / cleaning / retail": {
+          "entrant_share": 0.148,
+          "revenue_per_shopper": 0.663,
+          "share_90": [
+            0.113,
+            0.196
+          ]
+        },
+        "4.49 / environment / online": {
+          "entrant_share": 0.23,
+          "revenue_per_shopper": 1.035,
+          "share_90": [
+            0.181,
+            0.275
+          ]
+        },
+        "4.49 / environment / retail": {
+          "entrant_share": 0.177,
+          "revenue_per_shopper": 0.793,
+          "share_90": [
+            0.137,
+            0.21
+          ]
+        },
+        "4.49 / low_odor / online": {
+          "entrant_share": 0.165,
+          "revenue_per_shopper": 0.741,
+          "share_90": [
+            0.126,
+            0.21
+          ]
+        },
+        "4.49 / low_odor / retail": {
+          "entrant_share": 0.124,
+          "revenue_per_shopper": 0.556,
+          "share_90": [
+            0.096,
+            0.153
+          ]
+        },
+        "5.49 / cleaning / online": {
+          "entrant_share": 0.133,
+          "revenue_per_shopper": 0.731,
+          "share_90": [
+            0.102,
+            0.176
+          ]
+        },
+        "5.49 / cleaning / retail": {
+          "entrant_share": 0.099,
+          "revenue_per_shopper": 0.544,
+          "share_90": [
+            0.072,
+            0.136
+          ]
+        },
+        "5.49 / environment / online": {
+          "entrant_share": 0.16,
+          "revenue_per_shopper": 0.878,
+          "share_90": [
+            0.12,
+            0.199
+          ]
+        },
+        "5.49 / environment / retail": {
+          "entrant_share": 0.12,
+          "revenue_per_shopper": 0.658,
+          "share_90": [
+            0.088,
+            0.154
+          ]
+        },
+        "5.49 / low_odor / online": {
+          "entrant_share": 0.112,
+          "revenue_per_shopper": 0.612,
+          "share_90": [
+            0.083,
+            0.152
+          ]
+        },
+        "5.49 / low_odor / retail": {
+          "entrant_share": 0.082,
+          "revenue_per_shopper": 0.453,
+          "share_90": [
+            0.06,
+            0.11
+          ]
+        }
+      },
+      "price_level_share": {
+        "3.49": 0.247,
+        "4.49": 0.173,
+        "5.49": 0.118
+      }
+    },
+    "model_version": "logit-v2-history",
+    "data_version": "c264dfd786a8",
+    "code_version": "77fafbd",
+    "verdict": "MOSTLY CONFIRMED. 3.49 has the most entrant share in 100% of resamples; online beats retail in 98.5%; environment is the best message in 81.5% (cleaning 17.5%, low_odor 1%). Best option 3.49/environment/online = 32.1% share [25%, 38%]. Revenue per shopper is highest at 3.49 (1.12 vs 1.04 at 4.49). SURPRISE: break-even cost per bottle for 4.49 over 3.49 is only 1.16 [0.11, 1.79], not ~1.50. If a bottle costs the brand more than ~1.16, 4.49 makes more profit; above ~2.36, 5.49 does. We do not know the cost, so the PROFIT-best price is unknown. CONFLICT to explain: run 3 says messages are not proven different (p=0.057), here environment wins 81.5% of resamples. Both are true: environment is the most likely winner, but a 1-in-5 chance it is not is too high to call it settled. These are first-visit shares only; no repeat or after-use effects."
+  },
+  {
+    "id": 6,
+    "name": "e06 can we trust said_why",
+    "started_at": "2026-10-17T13:38:08+00:00",
+    "finished_at": "2026-10-17T13:38:08+00:00",
+    "status": "ok",
+    "expectation": "\"I bought the cleaner I often buy\" matches the survey usual brand in at least 70% of cases.\n\"I know this brand/cleaner\" shows up on some first-ever entrant purchases (over 5%): a clear contradiction.\n\"none\" reasons said alongside a purchase: under 5%.\n\"less waste\"/\"refillable\" come from entrant buyers over 90% of the time, and entrant buyers give\nthem about twice as often when the shelf said \"environment\".\nPeople who bought nothing answer less often than buyers.\nOverall: most answers fit the facts, but 10-25% of checkable answers contradict them.\nSo said_why is a weak hint, not the truth, and I will not use it as a model input.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "field": "said_why"
+    },
+    "outputs": {
+      "answer_rate_by_choice": {
+        "budget": 0.208,
+        "entrant": 0.289,
+        "none": 0.244,
+        "scented": 0.257,
+        "standard": 0.211
+      },
+      "checkable_answers": 204,
+      "entrant_buyers_waste_reason_by_message": {
+        "(blank)": {
+          "n_answered": 5,
+          "share_waste_or_refill": 0.4
+        },
+        "cleaning": {
+          "n_answered": 26,
+          "share_waste_or_refill": 0.462
+        },
+        "environment": {
+          "n_answered": 28,
+          "share_waste_or_refill": 0.357
+        },
+        "low_odor": {
+          "n_answered": 14,
+          "share_waste_or_refill": 0.5
+        }
+      },
+      "per_reason": {
+        "I bought the cleaner I often buy.": {
+          "cannot_check": 5,
+          "chose_budget": 17,
+          "chose_standard": 19,
+          "contradicts": 9,
+          "fits": 22
+        },
+        "I did not need cleaner today.": {
+          "chose_none": 22,
+          "fits": 22
+        },
+        "I did not see a reason to pay more.": {
+          "chose_budget": 27,
+          "fits": 27
+        },
+        "I expected it to clean tough stains.": {
+          "chose_standard": 15,
+          "fits": 15
+        },
+        "I know this brand.": {
+          "cannot_check": 20,
+          "chose_standard": 20
+        },
+        "I know this cleaner.": {
+          "cannot_check": 17,
+          "chose_scented": 17
+        },
+        "I left without buying one.": {
+          "chose_none": 10,
+          "fits": 10
+        },
+        "I still had cleaner at home.": {
+          "chose_none": 18,
+          "contradicts": 7,
+          "fits": 11
+        },
+        "I thought it would clean well.": {
+          "cannot_check": 14,
+          "chose_entrant": 14
+        },
+        "I thought it would make less waste.": {
+          "chose_entrant": 24,
+          "fits": 24
+        },
+        "I wanted a refillable bottle.": {
+          "chose_entrant": 7,
+          "fits": 7
+        },
+        "I wanted less smell.": {
+          "chose_entrant": 24,
+          "fits": 24
+        },
+        "I wanted the fresh scent.": {
+          "chose_scented": 22,
+          "fits": 22
+        },
+        "I wanted to try a new cleaner.": {
+          "chose_entrant": 4,
+          "fits": 4
+        },
+        "The price fit my budget.": {
+          "cannot_check": 19,
+          "chose_budget": 19
+        },
+        "The price seemed fair.": {
+          "cannot_check": 8,
+          "chose_scented": 8
+        }
+      },
+      "share_contradicting": 0.078
+    },
+    "model_version": "check-v1",
+    "data_version": "c264dfd786a8",
+    "code_version": "48881d9",
+    "verdict": "PARTLY WRONG, and more useful than expected. Only 7.8% of checkable answers contradict facts (I guessed 10-25%). But the bigger finding: 15 of 16 reasons always come with ONE product (e.g. 'I know this brand' = always standard, 'I wanted less smell' = always entrant). Knowing the reason gives the choice 94.1% of the time (build), 95.7% (check: I looked at the check set's said_why mapping only for this count, no model decision used it). So said_why mostly repeats each product's own claims; it is not an independent 'why'. Contradictions sit in 2 reasons: 'I bought the cleaner I often buy' disagrees with the survey usual brand 9 of 31 times; 'I still had cleaner at home' after buying nothing last visit 7 of 18. Message priming guess WRONG: entrant buyers give waste/refill reasons LESS under environment (36%) than cleaning (46%) or low_odor (50%), small n. Entrant buyers answer more often (28.9% vs 20.8% budget). Decision: do not use said_why as a model input or as the household-level reason."
+  },
+  {
+    "id": 7,
+    "name": "e07 one-time check set test of locked model D",
+    "started_at": "2026-10-17T13:38:54+00:00",
+    "finished_at": "2026-10-17T13:38:56+00:00",
+    "status": "ok",
+    "expectation": "PASS RULES, decided now:\n (1) D log loss on check is lower than the starter (1.5626) AND the constant model (1.5905).\n (2) D's predicted entrant share is within 3 points of the real check share (18.3%).\n (3) Raw check data: entrant share at $3.49 is above $5.49.\nMessage and channel directions on check are reported but cannot pass or fail anything:\nwith about 100 visits per message, they are too noisy to settle it.\nMy guesses: D about 1.555, beating the starter by less than 0.01, and the household\ninterval for \"D minus starter\" probably includes zero. Entrant share predicted about 20%.\nPrice direction holds. environment > low_odor and online > retail: I think they hold, but weakly.",
+    "inputs": {
+      "model": "D = brand, price, household, levers, history",
+      "reps": 2000,
+      "ridge": 0.01,
+      "seed": 3,
+      "test": "check_visits.csv (50 households)",
+      "train": "visits.csv (all 200 households)"
+    },
+    "outputs": {
+      "C_no_history": {
+        "log_loss": 1.5541,
+        "share_expected": {
+          "budget": 0.2289,
+          "entrant": 0.2082,
+          "none": 0.1816,
+          "scented": 0.1483,
+          "standard": 0.233
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.2967,
+        "visits": 300
+      },
+      "D": {
+        "log_loss": 1.5517,
+        "share_expected": {
+          "budget": 0.2279,
+          "entrant": 0.2097,
+          "none": 0.1814,
+          "scented": 0.1478,
+          "standard": 0.2331
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.3133,
+        "visits": 300
+      },
+      "D_minus_starter_log_loss": {
+        "household_95": [
+          -0.0376,
+          0.0152
+        ],
+        "point": -0.0109
+      },
+      "constant": {
+        "log_loss": 1.5905,
+        "share_expected": {
+          "budget": 0.2525,
+          "entrant": 0.2108,
+          "none": 0.1708,
+          "scented": 0.1525,
+          "standard": 0.2133
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.25,
+        "visits": 300
+      },
+      "entrant_calibration": {
+        "15-25%": {
+          "actual": 0.134,
+          "predicted": 0.197,
+          "visits": 142
+        },
+        "25%+": {
+          "actual": 0.362,
+          "predicted": 0.327,
+          "visits": 80
+        },
+        "<15%": {
+          "actual": 0.09,
+          "predicted": 0.113,
+          "visits": 78
+        }
+      },
+      "raw_check_directions": {
+        "channel": {
+          "online": [
+            0.222,
+            153
+          ],
+          "retail": [
+            0.143,
+            147
+          ]
+        },
+        "message": {
+          "cleaning": [
+            0.179,
+            106
+          ],
+          "environment": [
+            0.219,
+            96
+          ],
+          "low_odor": [
+            0.179,
+            78
+          ]
+        },
+        "price": {
+          "3.49": [
+            0.255,
+            102
+          ],
+          "4.49": [
+            0.206,
+            107
+          ],
+          "5.49": [
+            0.077,
+            91
+          ]
+        }
+      },
+      "rules": {
+        "1_beats_starter_and_constant": true,
+        "2_entrant_share_within_3_points": true,
+        "3_price_direction_holds": true
+      },
+      "starter": {
+        "log_loss": 1.5626,
+        "share_expected": {
+          "budget": 0.2838,
+          "entrant": 0.1544,
+          "none": 0.1739,
+          "scented": 0.1562,
+          "standard": 0.2318
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.28,
+        "visits": 300
+      }
+    },
+    "model_version": "logit-v2-history",
+    "data_version": "c264dfd786a8",
+    "code_version": "76e7533",
+    "verdict": "CONFIRMED VIEW (all 3 pre-declared rules pass). D log loss 1.552 vs starter 1.563 vs constant 1.591. Gain of 0.011 is small and the household interval [-0.038, +0.015] includes zero, as guessed: D is better on average but not proven better on 50 households. Entrant share predicted 21.0% vs actual 18.3% (2.6 pts, inside the 3-pt rule): D slightly OVERSELLS the entrant; the 15-25% bin predicts 19.7% but only 13.4% buy. Price direction strong on new households: 25.5% at 3.49 vs 7.7% at 5.49. Message and channel point the same way as in build (environment 21.9% vs 17.9%; online 22.2% vs 14.3%), which supports them but cannot settle them at ~100 visits each. The check set is now USED; any later result on it is not a fresh test."
   }
 ]
