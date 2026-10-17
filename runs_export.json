@@ -1,0 +1,217 @@
+[
+  {
+    "id": 1,
+    "name": "e01 starter model and constant-share reference",
+    "started_at": "2026-10-17T12:58:32+00:00",
+    "finished_at": "2026-10-17T12:58:32+00:00",
+    "status": "ok",
+    "expectation": "Starter: top choice matched about 29% (build) and 28% (check), as run_baseline.py prints.\nI expect its log loss to be WORSE than the constant-share reference, because its weights are\nhand-set and it underpredicts the entrant (15.9% vs 21.1%). Constant reference log loss should\nbe near the entropy of the shares, about 1.59 on build.",
+    "inputs": {
+      "models": [
+        "baseline.py as given",
+        "constant build shares"
+      ]
+    },
+    "outputs": {
+      "constant_build_in_sample": {
+        "log_loss": 1.594,
+        "share_expected": {
+          "budget": 0.2525,
+          "entrant": 0.2108,
+          "none": 0.1708,
+          "scented": 0.1525,
+          "standard": 0.2133
+        },
+        "share_observed": {
+          "budget": 0.2525,
+          "entrant": 0.2108,
+          "none": 0.1708,
+          "scented": 0.1525,
+          "standard": 0.2133
+        },
+        "top_choice_matched": 0.2525,
+        "visits": 1200
+      },
+      "constant_check": {
+        "log_loss": 1.5905,
+        "share_expected": {
+          "budget": 0.2525,
+          "entrant": 0.2108,
+          "none": 0.1708,
+          "scented": 0.1525,
+          "standard": 0.2133
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.25,
+        "visits": 300
+      },
+      "note": "The starter is not trained on any data, so scoring it on check uses up nothing.",
+      "starter_build": {
+        "log_loss": 1.5793,
+        "share_expected": {
+          "budget": 0.3151,
+          "entrant": 0.1593,
+          "none": 0.1533,
+          "scented": 0.1624,
+          "standard": 0.2099
+        },
+        "share_observed": {
+          "budget": 0.2525,
+          "entrant": 0.2108,
+          "none": 0.1708,
+          "scented": 0.1525,
+          "standard": 0.2133
+        },
+        "top_choice_matched": 0.29,
+        "visits": 1200
+      },
+      "starter_check": {
+        "log_loss": 1.5626,
+        "share_expected": {
+          "budget": 0.2838,
+          "entrant": 0.1544,
+          "none": 0.1739,
+          "scented": 0.1562,
+          "standard": 0.2318
+        },
+        "share_observed": {
+          "budget": 0.25,
+          "entrant": 0.1833,
+          "none": 0.1533,
+          "scented": 0.1533,
+          "standard": 0.26
+        },
+        "top_choice_matched": 0.28,
+        "visits": 300
+      }
+    },
+    "model_version": "starter-v0",
+    "data_version": "c264dfd786a8",
+    "code_version": "aa3dba9",
+    "verdict": "WRONG expectation: starter log loss 1.579 beats the constant reference 1.594 on build (and 1.563 vs 1.591 on check). But only by about 1%, so the hand-set weights carry very little signal. Bar for any new model: clearly below 1.58."
+  },
+  {
+    "id": 2,
+    "name": "e02 household bootstrap of lever gaps",
+    "started_at": "2026-10-17T12:58:59+00:00",
+    "finished_at": "2026-10-17T12:59:16+00:00",
+    "status": "ok",
+    "expectation": "Price: $3.49 minus $5.49 entrant share interval excludes zero, roughly +10 to +22 points.\nMessage: environment minus low_odor is borderline; I expect the lower end of the interval near 0.\nCleaning vs the others: interval includes zero.\nChannel: online minus retail is borderline, lower end near or below 0.\nHousehold resampling gives wider intervals than visit resampling, by 10-30%.",
+    "inputs": {
+      "data": "visits.csv (build only)",
+      "interval": "95% percentile",
+      "reps": 4000,
+      "seed": 7
+    },
+    "outputs": {
+      "channel: online - retail": {
+        "excludes_zero": true,
+        "gap_points": 5.2,
+        "household_95": [
+          0.8,
+          9.5
+        ],
+        "share_of_reps_above_zero": 0.989,
+        "visit_95": [
+          0.6,
+          9.6
+        ],
+        "width_ratio_household_vs_visit": 0.96
+      },
+      "entrant_message: cleaning - low_odor": {
+        "excludes_zero": false,
+        "gap_points": 4.2,
+        "household_95": [
+          -1.5,
+          10.0
+        ],
+        "share_of_reps_above_zero": 0.924,
+        "visit_95": [
+          -1.6,
+          10.0
+        ],
+        "width_ratio_household_vs_visit": 1.0
+      },
+      "entrant_message: environment - cleaning": {
+        "excludes_zero": false,
+        "gap_points": 3.1,
+        "household_95": [
+          -3.3,
+          9.5
+        ],
+        "share_of_reps_above_zero": 0.831,
+        "visit_95": [
+          -3.1,
+          9.3
+        ],
+        "width_ratio_household_vs_visit": 1.03
+      },
+      "entrant_message: environment - low_odor": {
+        "excludes_zero": true,
+        "gap_points": 7.3,
+        "household_95": [
+          1.8,
+          13.4
+        ],
+        "share_of_reps_above_zero": 0.994,
+        "visit_95": [
+          1.4,
+          13.1
+        ],
+        "width_ratio_household_vs_visit": 0.99
+      },
+      "entrant_price: 3.49 - 4.49": {
+        "excludes_zero": true,
+        "gap_points": 10.0,
+        "household_95": [
+          4.3,
+          15.6
+        ],
+        "share_of_reps_above_zero": 0.999,
+        "visit_95": [
+          4.1,
+          15.8
+        ],
+        "width_ratio_household_vs_visit": 0.96
+      },
+      "entrant_price: 3.49 - 5.49": {
+        "excludes_zero": true,
+        "gap_points": 16.1,
+        "household_95": [
+          11.2,
+          21.1
+        ],
+        "share_of_reps_above_zero": 1.0,
+        "visit_95": [
+          10.8,
+          21.7
+        ],
+        "width_ratio_household_vs_visit": 0.91
+      },
+      "entrant_price: 4.49 - 5.49": {
+        "excludes_zero": true,
+        "gap_points": 6.1,
+        "household_95": [
+          0.9,
+          11.4
+        ],
+        "share_of_reps_above_zero": 0.989,
+        "visit_95": [
+          1.2,
+          11.4
+        ],
+        "width_ratio_household_vs_visit": 1.02
+      }
+    },
+    "model_version": "bootstrap-v1",
+    "data_version": "c264dfd786a8",
+    "code_version": "47b5f0c",
+    "verdict": "MIXED. Price confirmed: 3.49 vs 5.49 = +16.1 pts [11.2, 21.1]. Clustering concern WRONG for gaps: household and visit intervals are the same width (ratio 0.91-1.03), because each household saw several levels, so its own taste cancels in a gap. Households do differ (entrant-count variance 1.58 vs 1.00 binomial), so clustering still matters for levels. By my FIRST.md rule, environment vs low_odor [1.8, 13.4] and online vs retail [0.8, 9.5] pass. But I picked environment vs low_odor because it was the largest raw gap, and 7 gaps were tested; both lower ends are close to 0. I do NOT yet treat message or channel as settled. Next: a stricter test declared in advance."
+  }
+]
