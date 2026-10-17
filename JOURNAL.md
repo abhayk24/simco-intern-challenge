@@ -213,3 +213,9 @@ The same answer is available as JSON at `/api/predict`. All saved runs can be op
 - **Price: I don't know yet.** It depends on the cost per bottle (run 5). Test $3.49 against $4.49, or just ask the brand for its cost.
 
 **The run that changed my mind most: run 5.** Before it, I thought "lowest price wins". After it, I saw that the clearest finding in the data (price) still doesn't make the business decision on its own.
+
+**A flaw I found in my own run log (final check).** Each run saves the git commit it ran on. Two records are misleading:
+- **Run 1** says `aa3dba9`, but `runlog.py` and `e01_baseline.py` were brand-new files that weren't committed yet. My "uncommitted changes" check ignored new files. They were committed right after the run, in `8c5d112`.
+- **Run 4** says `+dirty`, but the only uncommitted change was `runs.sqlite` (the log itself, holding run 3's verdict), not code. The e04 code is exactly commit `daa72d1`.
+
+I fixed the check for future runs: it now counts new code files and ignores the log's own files. I left the old records as they are and explain them here, because editing saved runs would defeat the point of the log.

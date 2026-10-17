@@ -65,9 +65,12 @@ def code_version():
     try:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
                                 capture_output=True, text=True, check=True).stdout.strip()
-        dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT,
-                               capture_output=True, text=True, check=True).stdout.strip()
-        return commit + ("+dirty" if dirty else "")
+        status = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT,
+                                capture_output=True, text=True, check=True).stdout.splitlines()
+        # Count new (untracked) code files too, but not the run log's own output files.
+        ignore = ("runs.sqlite", "runs_export.json", "model/")
+        changed = [line[3:] for line in status if not line[3:].startswith(ignore)]
+        return commit + ("+dirty" if changed else "")
     except (OSError, subprocess.CalledProcessError):
         return "unknown"
 
