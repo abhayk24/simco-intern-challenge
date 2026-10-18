@@ -219,3 +219,5 @@ The same answer is available as JSON at `/api/predict`. All saved runs can be op
 - **Run 4** says `+dirty`, but the only uncommitted change was `runs.sqlite` (the log itself, holding run 3's verdict), not code. The e04 code is exactly commit `daa72d1`.
 
 I fixed the check for future runs: it now counts new code files and ignores the log's own files. I left the old records as they are and explain them here, because editing saved runs would defeat the point of the log.
+
+**Added after the final check: `experiments/e00_explore.py`.** The Stage 0 counts (purchase rates by price, message and channel, the fairness cross-tables, the free-text counts), and four quick checks quoted later (spread 1.58, repeat 23.1%, 27.1% vs 17.5%, said_why 94%), were first run as one-off snippets and never saved. This script reproduces all of them exactly, so every number in this journal can be traced to code. It only reads data and prints, so it isn't a saved run.

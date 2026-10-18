@@ -28,6 +28,7 @@ Then open http://localhost:8000. Change a household, price, message or channel a
 | `explain.py` | Answer for one household: chances, likely range, "change one thing" reasons with trust labels |
 | `app.py` | The web page and JSON endpoint |
 | `runlog.py` | Saves each run: expectation (written first), inputs, outputs, model, data and code version, verdict |
+| `experiments/e00_explore.py` | Reproduces the Stage 0 counts and the quick checks quoted in the journal: `python -m experiments.e00_explore` |
 | `experiments/` | One file per run (e01 to e11, run 8 is `build_model.py`). Each one states its expectation before it runs |
 | `TRUST.md` | Checks, failed and conflicting ideas, what the data can't tell, the real-shopper test |
 | `JOURNAL.md` | What I thought and decided at each stage, in order |
