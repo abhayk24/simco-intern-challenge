@@ -64,7 +64,7 @@ Only two things: whether the household bought the new cleaner before, and whethe
 
 **What would change my decision.** If $4.49 sells almost as well as $3.49, or $3.49 buyers rarely buy again, I would choose $4.49. If cleaning beats environment, I would switch messages. If the company shares its cost per bottle, the price may not need a separate test.
 
-## Final recommendation in detail( As instru
+## Final recommendation in detail ( Word limit more than 200 words here)
 
 ### 1. Recommendation
 
