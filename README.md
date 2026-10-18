@@ -54,7 +54,7 @@ To redo a run, for example run 3: `python -m experiments.e03_grow_model`. Each r
 
 Only two things: whether the household bought the new cleaner before, and whether it gave a good or bad note after using it. I tested other history pieces (repeating the last choice, buying nothing right after buying) and they did nothing (run 4).
 
-## Final note
+## Final note( it has 200 word limit, but I added detail final note thats break assignment rule but it would be better to understand , what I understood from assignment)
 
 **Recommendation.** I recommend testing the product online first, with the environment message as one of the options. My model predicts more purchases at $3.49 than at $4.49 (32% vs. 23%). But if one bottle costs more than about $1.16 to produce, $4.49 may generate more profit per shopper. I do not have the production cost, so I cannot confidently choose the final price yet.
 
@@ -64,7 +64,7 @@ Only two things: whether the household bought the new cleaner before, and whethe
 
 **What would change my decision.** If $4.49 sells almost as well as $3.49, or $3.49 buyers rarely buy again, I would choose $4.49. If cleaning beats environment, I would switch messages. If the company shares its cost per bottle, the price may not need a separate test.
 
-## Final recommendation in detail
+## Final recommendation in detail( As instru
 
 ### 1. Recommendation
 
