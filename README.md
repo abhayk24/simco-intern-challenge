@@ -60,7 +60,7 @@ Only two things: whether the household bought the new cleaner before, and whethe
 
 **What changed my thinking.** Run 5. I first thought the lowest price was best, because price had the clearest effect. My profit calculation showed that higher sales do not always mean higher profit. Run 9 also made me less confident about online.
 
-**Next experiment.** One online experiment, with shoppers randomly assigned to four versions: $3.49 or $4.49, each with the environment or cleaning message. About 3,700 shoppers if results match my model, about 15,000 if the differences are smaller. I would measure first purchases and repeat purchases within eight weeks.
+**Next experiment.** One online experiment, with shoppers randomly assigned to four versions: $3.49 or $4.49, each with the environment or cleaning message. About 3,700 shoppers if results match my model, about 15,000 if the differences are smaller. I would measure first purchases and eight-week repeat purchases.
 
 **What would change my decision.** If $4.49 sells almost as well as $3.49, or $3.49 buyers rarely buy again, I would choose $4.49. If cleaning beats environment, I would switch messages. If the company shares its cost per bottle, the price may not need a separate test.
 
